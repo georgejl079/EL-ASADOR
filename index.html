@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ebebeb">
+<meta name="description" content="EL ASADOR · Asado chaqueño boliviano en Yacuiba. Catálogo online y atención por WhatsApp.">
+<title>EL ASADOR | Asado Chaqueño Boliviano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  /* Paleta Elegante: Gris Perla, Blanco, Vino, Azul Oscuro */
+  --bg: #ebebeb; 
+  --surface: #ffffff;
+  --text-main: #2c2c2c;
+  --text-dim: #5a5a5a;
+  --vino: #7a1f2b;
+  --vino-dark: #5a141e;
+  --azul: #1c2a4a;
+  --azul-light: #2d426f;
+  --border: #dcdcdc;
+  --wa: #25D366;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --header-h: 64px;
+  --tab-h: 60px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Lora', serif;
+  background-color: var(--bg);
+  color: var(--text-main);
+  padding-top: var(--header-h);
+  padding-bottom: calc(var(--tab-h) + var(--safe-b));
+  line-height: 1.4; /* Interlineado más ajustado */
+  letter-spacing: -0.2px; /* Letras más juntas */
+}
+
+body.product-open { padding-top: 56px; }
+body.desktop { padding-bottom: 0; padding-top: 0; }
+
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', serif;
+  color: var(--vino);
+  font-weight: 700;
+  letter-spacing: 0; /* Sin espaciado extra */
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+
+/* —— Header —— */
+.app-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--surface);
+  z-index: 2000;
+  box-shadow: 0 1px 0 var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+.header-inner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.logo-btn {
+  background: none; border: none;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  cursor: pointer;
+  color: var(--vino);
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+}
+.logo-btn i { color: var(--azul); font-size: 1.1rem; }
+
+.search-bar {
+  flex: 1; max-width: 300px;
+  display: flex; align-items: center;
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+.search-bar:focus-within { 
+  border-color: var(--azul); 
+  background: var(--surface);
+}
+.search-bar i { color: var(--text-dim); margin-right: 8px; font-size: 0.8rem; }
+.search-bar input {
+  border: none; background: transparent; outline: none;
+  width: 100%; font-size: 0.85rem; color: var(--text-main);
+  font-family: 'Lora', serif;
+}
+.search-bar input::placeholder { color: #999; }
+
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.icon-btn {
+  width: 38px; height: 38px;
+  border: none; background: var(--bg);
+  border-radius: 6px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; color: var(--text-main);
+  transition: all 0.2s ease;
+}
+.icon-btn:hover { background: var(--border); color: var(--vino); }
+
+.cart-btn { position: relative; }
+.cart-badge {
+  position: absolute; top: -2px; right: -2px;
+  background: var(--vino); color: #fff;
+  font-size: 0.6rem; font-weight: 700;
+  min-width: 16px; height: 16px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--surface);
+  font-family: 'Lora', serif;
+}
+
+/* —— Vistas —— */
+.view { display: none; animation: fadeIn 0.3s ease; }
+.view.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* —— Hero —— */
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 16px auto;
+  aspect-ratio: 21/9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: var(--azul);
+}
+@media (max-width: 768px) { 
+  .hero-carousel { 
+    aspect-ratio: 4/3; 
+    margin: 0; 
+    border-radius: 0; 
+    box-shadow: none;
+  } 
+}
+
+.hero-slide {
+  position: absolute; inset: 0;
+  opacity: 0; transition: opacity 0.8s ease;
+}
+.hero-slide.active { opacity: 1; }
+.hero-slide img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
+.hero-content {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(28,42,74,0.9) 0%, rgba(28,42,74,0.2) 70%, transparent 100%);
+  display: flex; flex-direction: column;
+  justify-content: center; padding: 0 40px;
+  color: #fff;
+}
+@media (max-width: 768px) {
+  .hero-content { 
+    padding: 20px; 
+    justify-content: flex-end; 
+    background: linear-gradient(0deg, rgba(28,42,74,0.95) 0%, transparent 80%); 
+  }
+}
+.hero-content h1 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.hero-content h1 span { color: var(--vino); font-style: italic; }
+.hero-content p {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 20px;
+  max-width: 400px;
+}
+.hero-cta {
+  align-self: flex-start;
+  background: var(--vino);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-family: 'Lora', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(122,31,43,0.3);
+}
+.hero-cta:hover { 
+  background: var(--vino-dark); 
+  transform: translateY(-1px);
+}
+
+.hero-dots {
+  position: absolute; bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 10;
+}
+.hero-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  border: none; cursor: pointer;
+  transition: all 0.3s ease;
+}
+.hero-dot.active { background: var(--vino); transform: scale(1.2); }
+
+/* —— Contenido Principal —— */
+.site-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 32px 0 16px;
+  border-bottom: 2px solid var(--border); /* Línea más definida */
+  padding-bottom: 8px;
+}
+.section-title h2 { font-size: 1.4rem; color: var(--vino); margin-bottom: 0; }
+.section-title span { color: var(--text-dim); font-size: 0.85rem; font-style: italic; }
+
+/* —— Categorías —— */
+.cat-scroll {
+  display: flex; gap: 12px;
+  overflow-x: auto;
+  padding: 0 0 8px;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+.cat-scroll::-webkit-scrollbar { display: none; }
+.cat-card {
+  flex: 0 0 200px;
+  aspect-ratio: 4/3;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  scroll-snap-align: start;
+  border: 1px solid var(--border);
+}
+.cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.cat-card:hover img { transform: scale(1.05); }
+.cat-card span {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 12px;
+  background: linear-gradient(transparent, rgba(28,42,74,0.9));
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* —— Grid Productos (Estructura muy definida) —— */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px; /* Espacio más ajustado entre tarjetas */
+  margin-bottom: 32px;
+}
+.card {
+  background: var(--surface);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+}
+.card:hover { 
+  transform: translateY(-2px); 
+  box-shadow: var(--shadow-lg);
+}
+.card-img-btn {
+  border: none; background: none; padding: 0; cursor: pointer;
+  width: 100%; aspect-ratio: 4/3; overflow: hidden;
+  position: relative;
+}
+.card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.card-img-btn:hover .card-img { transform: scale(1.05); }
+
+.card-badge {
+  position: absolute; top: 8px; left: 8px;
+  background: var(--vino);
+  color: #fff;
+  font-family: 'Lora', serif;
+  font-size: 0.6rem; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  z-index: 2;
+}
+.card-badge.popular { background: var(--azul); }
+
+.card-info {
+  padding: 12px 14px 8px; /* Padding más ajustado */
+  border: none; background: none; text-align: left; cursor: pointer;
+  flex: 1;
+}
+.card-info h4 {
+  font-size: 1.1rem;
+  color: var(--text-main);
+  margin-bottom: 2px;
+  letter-spacing: 0;
+}
+.card-info .sku { font-size: 0.7rem; color: var(--text-dim); margin-bottom: 6px; font-family: 'Lora', serif; }
+.card-info .price {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--vino);
+  font-weight: 700;
+}
+.card-actions {
+  display: flex;
+  padding: 0 14px 14px;
+  gap: 6px;
+}
+.btn-primary {
+  flex: 1;
+  background: var(--azul);
+  color: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  font-family: 'Lora', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-primary:hover { background: var(--azul-light); }
+.btn-wa-small {
+  width: 34px;
+  background: rgba(37,211,102,0.1);
+  color: var(--wa);
+  border: 1px solid rgba(37,211,102,0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+.btn-wa-small:hover { background: var(--wa); color: #fff; border-color: var(--wa); }
+
+/* —— Filtros —— */
+.filters {
+  display: flex; gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  scrollbar-width: none;
+}
+.filters::-webkit-scrollbar { display: none; }
+.filter-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-family: 'Lora', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.filter-chip:hover { border-color: var(--vino); color: var(--vino); }
+.filter-chip.active {
+  background: var(--vino);
+  border-color: var(--vino);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(122,31,43,0.2);
+}
+
+/* —— Página Producto —— */
+.pd-container {
+  max-width: 900px;
+  margin: 32px auto;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+@media (max-width: 768px) { .pd-container { grid-template-columns: 1fr; margin: 20px auto; gap: 20px; } }
+
+.pd-gallery img { width: 100%; border-radius: 8px; box-shadow: var(--shadow-md); border: 1px solid var(--border); }
+.pd-body { display: flex; flex-direction: column; padding-top: 4px; }
+.pd-breadcrumb { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0; font-family: 'Lora', serif; }
+.pd-name { font-size: 2rem; color: var(--text-main); margin-bottom: 4px; }
+.pd-price { font-size: 1.8rem; color: var(--vino); font-family: 'Playfair Display', serif; margin: 12px 0; font-weight: 700; }
+.pd-desc { color: var(--text-dim); line-height: 1.6; margin-bottom: 24px; font-size: 0.95rem; }
+.pd-actions { display: flex; gap: 8px; }
+.btn-buy {
+  flex: 1;
+  background: var(--vino);
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 6px;
+  font-family: 'Lora', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(122,31,43,0.2);
+}
+.btn-buy:hover { background: var(--vino-dark); transform: translateY(-1px); }
+.btn-share {
+  width: 48px;
+  background: var(--bg);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+}
+.btn-share:hover { background: var(--surface); color: var(--vino); border-color: var(--vino); }
+.pd-back { 
+  background: none; border: none; color: var(--text-dim); 
+  cursor: pointer; margin-bottom: 16px; font-size: 0.85rem; 
+  display: flex; align-items: center; gap: 6px; font-weight: 700;
+  font-family: 'Lora', serif;
+  transition: color 0.2s;
+}
+.pd-back:hover { color: var(--vino); }
+
+/* —— Nosotros —— */
+.about-wrap {
+  max-width: 800px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+.about-hero {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.about-hero h2 {
+  font-size: 2.5rem;
+  color: var(--vino);
+  margin-bottom: 8px;
+}
+.about-hero p {
+  font-size: 1rem;
+  color: var(--text-dim);
+  max-width: 600px;
+  margin: 0 auto;
+  font-style: italic;
+}
+
+.about-block {
+  background: var(--surface);
+  padding: 28px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.about-block h3 { 
+  color: var(--vino); 
+  margin-bottom: 16px; 
+  font-size: 1.4rem; 
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.about-block p { color: var(--text-dim); line-height: 1.6; font-size: 0.95rem; }
+
+/* Proceso de preparación */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.process-step {
+  text-align: center;
+  padding: 16px;
+  background: var(--bg);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+.process-step i {
+  font-size: 1.8rem;
+  color: var(--vino);
+  margin-bottom: 8px;
+}
+.process-step h4 {
+  font-size: 1rem;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+.process-step p {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+/* Sucursales */
+.branches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+@media (max-width: 600px) { .branches-grid { grid-template-columns: 1fr; } }
+.branch-card {
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: 8px;
+  background: var(--bg);
+}
+.branch-card h4 { color: var(--vino); margin-bottom: 12px; font-size: 1.2rem; }
+.branch-card p { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-family: 'Lora', serif; }
+.branch-card i { color: var(--azul); width: 16px; }
+
+/* —— Carrito Flotante —— */
+.cart-panel {
+  position: fixed;
+  top: 0; right: -100%;
+  width: 100%; max-width: 380px;
+  height: 100vh;
+  background: var(--surface);
+  z-index: 3000;
+  box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+  transition: right 0.3s ease;
+  display: flex; flex-direction: column;
+  padding: 20px;
+  border-left: 1px solid var(--border);
+}
+.cart-panel.open { right: 0; }
+.cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+.cart-header h2 { color: var(--vino); font-size: 1.4rem; }
+.cart-items { flex: 1; overflow-y: auto; }
+.cart-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: center; }
+.cart-item img { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; }
+.cart-item-info { flex: 1; }
+.cart-item-info h4 { font-size: 0.95rem; color: var(--text-main); margin-bottom: 2px; font-family: 'Lora', serif; font-weight: 700; }
+.cart-item-info p { color: var(--vino); font-weight: 700; font-family: 'Playfair Display', serif; font-size: 0.95rem; }
+.cart-footer { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px; }
+.cart-total { display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text-main); font-family: 'Playfair Display', serif; }
+.btn-checkout {
+  width: 100%; background: var(--wa); color: #fff; border: none; padding: 14px;
+  border-radius: 6px; font-family: 'Lora', serif; font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(37,211,102,0.2);
+}
+.btn-checkout:hover { filter: brightness(1.1); }
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2500;
+  opacity: 0; visibility: hidden; transition: 0.3s ease;
+}
+.overlay.show { opacity: 1; visibility: visible; }
+
+/* —— WhatsApp Flotante —— */
+.wa-float {
+  position: fixed;
+  bottom: calc(var(--tab-h) + 16px);
+  right: 16px;
+  width: 52px; height: 52px;
+  background: var(--wa);
+  color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 12px rgba(37,211,102,0.4);
+  cursor: pointer;
+  z-index: 1500;
+  border: none;
+  transition: all 0.2s ease;
+}
+.wa-float:hover { transform: scale(1.05); }
+body.product-open .wa-float { bottom: 16px; }
+
+/* —— Bottom Nav (Barra inferior) —— */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: calc(var(--tab-h) + var(--safe-b));
+  padding-bottom: var(--safe-b);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 2000;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+}
+.tab {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2px;
+  border: none; background: none;
+  color: var(--text-dim);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 6px 2px;
+  font-family: 'Lora', serif;
+  transition: all 0.2s ease;
+}
+.tab i { font-size: 1.1rem; }
+.tab.active { color: var(--vino); }
+.tab.active i { color: var(--vino); }
+.tab:hover { color: var(--vino); }
+
+/* —— Toasts —— */
+.toast {
+  position: fixed; bottom: calc(var(--tab-h) + 80px); left: 50%; transform: translateX(-50%) translateY(10px);
+  background: var(--azul); color: #fff; padding: 10px 20px; border-radius: 4px;
+  font-size: 0.85rem; opacity: 0; transition: 0.3s; pointer-events: none;
+  z-index: 9999; box-shadow: var(--shadow-md);
+  font-weight: 700;
+  font-family: 'Lora', serif;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* —— Ajustes móviles específicos —— */
+@media (max-width: 768px) {
+  .header-inner { gap: 8px; }
+  .search-bar { display: none; }
+  .logo-btn { font-size: 1.2rem; }
+  .section-title { margin: 24px 0 12px; }
+  .section-title h2 { font-size: 1.2rem; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .card-info { padding: 10px 10px 6px; }
+  .card-info h4 { font-size: 0.95rem; }
+  .card-actions { flex-direction: column; padding: 0 10px 10px; }
+  .btn-primary { font-size: 0.65rem; padding: 6px; }
+  .btn-wa-small { width: 100%; height: 32px; }
+  .cart-panel { max-width: 100%; }
+  body.product-open .bottom-nav { display: none; }
+  body.product-open { padding-bottom: calc(64px + var(--safe-b)); }
+  .hero-content h1 { font-size: 1.8rem; }
+  .hero-content p { font-size: 0.85rem; }
+  .pd-name { font-size: 1.6rem; }
+  .about-hero h2 { font-size: 2rem; }
+  .about-block { padding: 20px; }
+}
+
+/* —— Escritorio —— */
+@media (min-width: 769px) {
+  body { padding-bottom: 0; padding-top: 0; }
+  .app-header { position: sticky; }
+  .bottom-nav { display: none; }
+  .wa-float { bottom: 24px; }
+  .search-bar { display: flex; }
+  .hero-carousel { margin-top: 24px; border-radius: 12px; }
+  .card-actions { flex-direction: row; }
+  .cart-panel { max-width: 380px; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+}
+</style>
+</head>
+<body>
+
+<header class="app-header" id="app-header">
+  <div class="header-inner">
+    <button type="button" class="logo-btn" onclick="App.go('home')">
+      <i class="fas fa-utensils"></i> EL ASADOR
+    </button>
+    
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="search" id="search-input" placeholder="Buscar asado, chorizo..." autocomplete="off">
+    </div>
+
+    <div class="header-actions">
+      <button type="button" class="icon-btn" onclick="App.sharePage()" aria-label="Compartir" style="display: none;" id="share-header-btn">
+        <i class="fas fa-share-alt"></i>
+      </button>
+      <button type="button" class="icon-btn" onclick="App.openCart()" aria-label="Carrito">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" onclick="App.closeCart()"></div>
+
+<!-- VISTA INICIO -->
+<main id="view-home" class="view active">
+  <div class="hero-carousel" id="hero-carousel"></div>
+  
+  <div class="site-container">
+    <div class="section-title">
+      <div>
+        <h2>Especialidades de la Casa</h2>
+        <span>Cortes seleccionados y tradición chaqueña</span>
+      </div>
+    </div>
+    <div class="cat-scroll" id="home-cats"></div>
+
+    <div class="section-title">
+      <h2>Los Favoritos</h2>
+      <button type="button" class="filter-chip" onclick="App.go('shop')">Ver Menú Completo</button>
+    </div>
+    <div class="grid" id="home-featured"></div>
+  </div>
+</main>
+
+<!-- VISTA TIENDA -->
+<main id="view-shop" class="view">
+  <div class="site-container" style="margin-top: 16px;">
+    <div class="section-title" style="margin-top: 0; border-bottom: none;">
+      <h2>Nuestro Menú</h2>
+    </div>
+    <div class="filters" id="shop-filters"></div>
+    <div class="grid" id="shop-grid"></div>
+  </div>
+</main>
+
+<!-- VISTA PRODUCTO -->
+<main id="view-product" class="view">
+  <div class="pd-container">
+    <div class="pd-gallery">
+      <button type="button" class="pd-back" onclick="App.go('shop')"><i class="fas fa-arrow-left"></i> Volver al Menú</button>
+      <img id="pd-img" src="" alt="">
+    </div>
+    <div class="pd-body">
+      <p class="pd-breadcrumb" id="pd-cat"></p>
+      <h1 class="pd-name" id="pd-name"></h1>
+      <p class="pd-desc" id="pd-desc"></p>
+      <p class="pd-price" id="pd-price"></p>
+      <div class="pd-actions">
+        <button type="button" class="btn-buy" onclick="App.addToCart()">Agregar al Pedido</button>
+        <button type="button" class="btn-share" onclick="App.shareProduct(App.product.id)" aria-label="Compartir producto"><i class="fas fa-share-alt"></i></button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- VISTA NOSOTROS -->
+<main id="view-about" class="view">
+  <div class="about-wrap">
+    <div class="about-hero">
+      <h2>Nuestra Pasión</h2>
+      <p>Más que un restaurante, somos un punto de encuentro para los amantes del buen asado chaqueño boliviano.</p>
+    </div>
+
+    <div class="about-block">
+      <h3>Nuestra Historia</h3>
+      <p>Nacimos en el corazón de Yacuiba con una misión clara: rescatar el auténtico sabor del asado chaqueño. Durante años, hemos perfeccionado nuestras recetas, seleccionando los mejores cortes y utilizando técnicas tradicionales de parrilla que realzan el sabor natural de la carne. Cada plato que servimos es un homenaje a nuestra tierra y a su gente.</p>
+    </div>
+
+    <div class="about-block">
+      <h3>El Secreto del Sabor</h3>
+      <div class="process-grid">
+        <div class="process-step">
+          <i class="fas fa-fire"></i>
+          <h4>Fuego Lento</h4>
+          <p>Cocinamos a fuego lento para lograr la jugosidad perfecta.</p>
+        </div>
+        <div class="process-step">
+          <i class="fas fa-leaf"></i>
+          <h4>Sazón Natural</h4>
+          <p>Especias chaqueñas y sal marina realzan el sabor.</p>
+        </div>
+        <div class="process-step">
+          <i class="fas fa-cut"></i>
+          <h4>Cortes Selectos</h4>
+          <p>Solo trabajamos con los mejores cortes de res y cerdo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <h3>Nuestra Misión</h3>
+      <p>Brindar una experiencia gastronómica inolvidable, donde la calidad, el sabor y la atención al cliente sean los pilares de cada visita. Queremos que cada persona que pruebe nuestro asado chaqueño se lleve un pedacito de la tradición boliviana.</p>
+    </div>
+
+    <div class="about-block">
+      <h3>Visítanos</h3>
+      <div class="branches-grid">
+        <div class="branch-card">
+          <h4>Casa Matriz</h4>
+          <p><i class="fas fa-map-marker-alt"></i> Yacuiba, Bolivia</p>
+          <p><i class="fas fa-phone"></i> 75177357</p>
+          <p><i class="fas fa-clock"></i> Lun - Dom: 11:00 - 23:00</p>
+        </div>
+        <div class="branch-card">
+          <h4>Sucursal</h4>
+          <p><i class="fas fa-map-marker-alt"></i> Yacuiba, Bolivia</p>
+          <p><i class="fas fa-phone"></i> 75177357</p>
+          <p><i class="fas fa-clock"></i> Lun - Dom: 11:00 - 23:00</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- PANEL CARRITO -->
+<aside class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <h2>Tu Pedido</h2>
+    <button type="button" class="icon-btn" onclick="App.closeCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total:</span>
+      <span id="cart-total" style="color: var(--vino);">Bs. 0</span>
+    </div>
+    <button type="button" class="btn-checkout" onclick="App.whatsapp()">
+      <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
+    </button>
+  </div>
+</aside>
+
+<!-- WHATSAPP FLOTANTE -->
+<button type="button" class="wa-float" onclick="App.whatsappHelp()" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</button>
+
+<!-- BARRA INFERIOR (Móvil) -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button type="button" class="tab active" data-view="home" onclick="App.go('home')"><i class="fas fa-home"></i><span>Inicio</span></button>
+  <button type="button" class="tab" data-view="shop" onclick="App.go('shop')"><i class="fas fa-store"></i><span>Menú</span></button>
+  <button type="button" class="tab" data-view="about" onclick="App.go('about')"><i class="fas fa-info-circle"></i><span>Nosotros</span></button>
+  <button type="button" class="tab" data-view="cart" onclick="App.openCart()"><i class="fas fa-shopping-bag"></i><span>Pedido</span></button>
+</nav>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const CONFIG = {
+  phone: '59175177357',
+  store: {
+    name: 'EL ASADOR',
+    address: 'Yacuiba, Bolivia'
+  }
+};
+
+const heroImages = [
+  'https://images.unsplash.com/photo-1544025162-d76694265947?w=1600&q=80',
+  'https://images.unsplash.com/photo-1558030006-450675393462?w=1600&q=80',
+  'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=1600&q=80'
+];
+
+const categories = [
+  { id: 'asados', name: 'Asados', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80' },
+  { id: 'chorizos', name: 'Chorizos', image: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=600&q=80' },
+  { id: 'guarniciones', name: 'Guarniciones', image: 'https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=600&q=80' },
+  { id: 'bebidas', name: 'Bebidas', image: 'https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=600&q=80' }
+];
+
+const catLabels = { asados: 'Asados', chorizos: 'Chorizos', guarniciones: 'Guarniciones', bebidas: 'Bebidas', combos: 'Combos' };
+
+const products = [
+  {
+    id: 1,
+    sku: 'EA-ASA-001',
+    name: 'Asado Chaqueño',
+    price: 35,
+    cat: 'asados',
+    badge: 'Popular',
+    img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80',
+    desc: 'Corte de asado chaqueño a la parrilla, con el sazón tradicional de la región. Cocinado a fuego lento para lograr el punto perfecto.'
+  },
+  {
+    id: 2,
+    sku: 'EA-CHO-002',
+    name: 'Chorizo Criollo',
+    price: 15,
+    cat: 'chorizos',
+    badge: 'Nuevo',
+    img: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800&q=80',
+    desc: 'Chorizo criollo chaqueño, jugoso y lleno de sabor. Perfecto para compartir. Preparado con receta tradicional.'
+  },
+  {
+    id: 3,
+    sku: 'EA-ASA-003',
+    name: 'Asado de Tira',
+    price: 32,
+    cat: 'asados',
+    img: 'https://images.unsplash.com/photo-1558030006-450675393462?w=800&q=80',
+    desc: 'Asado de tira a la parrilla, cocinado a fuego lento para lograr el punto perfecto. Ideal para los amantes de la carne.'
+  },
+  {
+    id: 4,
+    sku: 'EA-COM-004',
+    name: 'Combo Parrillero',
+    price: 55,
+    cat: 'combos',
+    img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80',
+    desc: 'Combo personal con asado chaqueño, guarnición a elección y una bebida refrescante. Ideal para una persona.'
+  },
+  {
+    id: 5,
+    sku: 'EA-GUA-005',
+    name: 'Ensalada de la Casa',
+    price: 12,
+    cat: 'guarniciones',
+    img: 'https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=800&q=80',
+    desc: 'Ensalada fresca de la casa, el acompañamiento perfecto para tu asado chaqueño. Preparada con ingredientes frescos del día.'
+  },
+  {
+    id: 6,
+    sku: 'EA-BEB-006',
+    name: 'Bebida Refrescante',
+    price: 8,
+    cat: 'bebidas',
+    img: 'https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=800&q=80',
+    desc: 'Bebida natural bien fría para acompañar tus asados chaqueños y calmar la sed. Disponible en varios sabores.'
+  }
+];
+
+const App = {
+  view: 'home',
+  activeFilter: 'all',
+  cart: JSON.parse(localStorage.getItem('elasadoryacuiba_cart') || '[]'),
+  product: null,
+  heroIndex: 0,
+  heroTimer: null,
+
+  init() {
+    this.renderHero();
+    this.renderHome();
+    this.renderShop();
+    this.updateCart();
+    
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => this.onSearch(e.target.value));
+    }
+
+    this.updateTabs('home');
+    
+    if (navigator.share || window.innerWidth < 769) {
+       document.getElementById('share-header-btn').style.display = 'flex';
+    }
+  },
+
+  renderHero() {
+    const track = document.getElementById('hero-carousel');
+    if (!track) return;
+    const heroCopy = [
+      { title: 'El auténtico <span>asado chaqueño</span>', text: 'Tradición, sabor y calidad en Yacuiba.' },
+      { title: 'Carne <span>jugosa y sabrosa</span>', text: 'Descubrí los cortes que marcan tendencia.' },
+      { title: 'Tu antojo. <span>Tu momento.</span>', text: 'Renová tu hambre con platos pensados para vos.' }
+    ];
+    track.innerHTML = heroImages.map((src, i) => {
+      const c = heroCopy[i] || heroCopy[0];
+      return `
+        <div class="hero-slide${i === 0 ? ' active' : ''}">
+          <img src="${src}" alt="EL ASADOR">
+          <div class="hero-content">
+            <h1>${c.title}</h1>
+            <p>${c.text}</p>
+            <button type="button" class="hero-cta" onclick="App.go('shop')">Ver Menú</button>
+          </div>
+        </div>`;
+    }).join('') +
+    `<div class="hero-dots">${heroImages.map((_, i) => 
+      `<button type="button" class="hero-dot${i === 0 ? ' active' : ''}" onclick="App.goToHeroSlide(${i})"></button>`
+    ).join('')}</div>`;
+    
+    this.startHeroAutoplay();
+  },
+
+  startHeroAutoplay() {
+    if (this.heroTimer) clearInterval(this.heroTimer);
+    this.heroTimer = setInterval(() => {
+      this.goToHeroSlide((this.heroIndex + 1) % heroImages.length);
+    }, 5000);
+  },
+
+  goToHeroSlide(idx) {
+    this.heroIndex = idx;
+    document.querySelectorAll('#hero-carousel .hero-slide').forEach((el, i) => el.classList.toggle('active', i === idx));
+    document.querySelectorAll('#hero-carousel .hero-dot').forEach((el, i) => el.classList.toggle('active', i === idx));
+    this.startHeroAutoplay();
+  },
+
+  renderHome() {
+    document.getElementById('home-cats').innerHTML = categories.map(c =>
+      `<article class="cat-card" onclick="App.filter('${c.id}')">
+        <img src="${c.image}" alt="${c.name}"><span>${c.name}</span>
+      </article>`
+    ).join('');
+    this.renderGrid('home-featured', products.slice(0, 4));
+  },
+
+  renderShop() {
+    const cats = ['all', ...categories.map(c => c.id)];
+    document.getElementById('shop-filters').innerHTML = cats.map(c => {
+      const label = c === 'all' ? 'Todos' : catLabels[c];
+      return `<button type="button" class="filter-chip${c === 'all' ? ' active' : ''}" data-cat="${c}" onclick="App.filter('${c}')">${label}</button>`;
+    }).join('');
+    this.filter(this.activeFilter);
+  },
+
+  filter(cat) {
+    this.activeFilter = cat;
+    document.querySelectorAll('#shop-filters .filter-chip').forEach(b => 
+      b.classList.toggle('active', b.dataset.cat === cat)
+    );
+    const data = cat === 'all' ? products : products.filter(p => p.cat === cat);
+    this.renderGrid('shop-grid', data);
+    this.go('shop');
+  },
+
+  renderGrid(id, data) {
+    const g = document.getElementById(id);
+    if (!g) return;
+    g.innerHTML = data.length ? data.map(p => {
+      let badgeHtml = '';
+      if (p.badge) {
+        badgeHtml = `<span class="card-badge ${p.badge.toLowerCase() === 'popular' ? 'popular' : ''}">${p.badge}</span>`;
+      }
+      return `
+      <div class="card">
+        <button type="button" class="card-img-btn" onclick="App.openProduct(${p.id})">
+          ${badgeHtml}
+          <img class="card-img" src="${p.img}" alt="${p.name}" loading="lazy">
+        </button>
+        <button type="button" class="card-info" onclick="App.openProduct(${p.id})">
+          <h4>${p.name}</h4>
+          <p class="sku">${p.sku}</p>
+          <p class="price">Bs. ${p.price}</p>
+        </button>
+        <div class="card-actions">
+          <button type="button" class="btn-primary" onclick="App.openProduct(${p.id})">Ver Detalles</button>
+          <button type="button" class="btn-wa-small" onclick="App.quickWhatsapp(${p.id})"><i class="fab fa-whatsapp"></i></button>
+        </div>
+      </div>
+    `}).join('') : '<p style="color:var(--text-dim);grid-column:1/-1;text-align:center;padding:40px 0;">No hay productos.</p>';
+  },
+
+  go(view) {
+    this.view = view;
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.updateTabs(view);
+  },
+
+  updateTabs(view) {
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.view === view);
+    });
+  },
+
+  openProduct(id) {
+    const p = products.find(x => x.id === Number(id));
+    if (!p) return;
+    this.product = p;
+    document.getElementById('pd-img').src = p.img;
+    document.getElementById('pd-cat').textContent = catLabels[p.cat];
+    document.getElementById('pd-name').textContent = p.name;
+    document.getElementById('pd-desc').textContent = p.desc;
+    document.getElementById('pd-price').textContent = 'Bs. ' + p.price;
+    this.go('product');
+  },
+
+  addToCart() {
+    if (!this.product) return;
+    this.cart.push({ ...this.product });
+    this.updateCart();
+    this.toast('Añadido al pedido');
+    this.openCart();
+  },
+
+  updateCart() {
+    localStorage.setItem('elasadoryacuiba_cart', JSON.stringify(this.cart));
+    document.getElementById('cart-badge').textContent = this.cart.length;
+    
+    const box = document.getElementById('cart-items');
+    let total = 0;
+    if (this.cart.length === 0) {
+      box.innerHTML = '<p style="text-align:center;color:var(--text-dim);padding:40px 0;">Tu pedido está vacío</p>';
+    } else {
+      box.innerHTML = this.cart.map((item, i) => {
+        total += item.price;
+        return `
+          <div class="cart-item">
+            <img src="${item.img}" alt="">
+            <div class="cart-item-info">
+              <h4>${item.name}</h4>
+              <p>Bs. ${item.price}</p>
+            </div>
+            <button type="button" class="icon-btn" onclick="App.removeCart(${i})" style="width:30px;height:30px;font-size:0.8rem;background:transparent;color:var(--vino);"><i class="fas fa-trash"></i></button>
+          </div>`;
+      }).join('');
+    }
+    document.getElementById('cart-total').textContent = 'Bs. ' + total;
+  },
+
+  removeCart(i) {
+    this.cart.splice(i, 1);
+    this.updateCart();
+  },
+
+  openCart() {
+    document.getElementById('cart-panel').classList.add('open');
+    document.getElementById('overlay').classList.add('show');
+    this.updateTabs('cart');
+  },
+
+  closeCart() {
+    document.getElementById('cart-panel').classList.remove('open');
+    document.getElementById('overlay').classList.remove('show');
+    this.updateTabs(this.view);
+  },
+
+  whatsapp() {
+    if (this.cart.length === 0) {
+      window.open('https://wa.me/' + CONFIG.phone + '?text=Hola EL ASADOR, quisiera hacer un pedido.', '_blank');
+      return;
+    }
+    const lines = this.cart.map(p => `• ${p.name} (Bs. ${p.price})`).join('\n');
+    const total = document.getElementById('cart-total').textContent;
+    const msg = `*PEDIDO EL ASADOR*\n${lines}\n\n*Total: ${total}*`;
+    window.open('https://wa.me/' + CONFIG.phone + '?text=' + encodeURIComponent(msg), '_blank');
+  },
+
+  whatsappHelp() {
+    window.open('https://wa.me/' + CONFIG.phone + '?text=Hola EL ASADOR, quiero consultar disponibilidad.', '_blank');
+  },
+
+  quickWhatsapp(id) {
+    const p = products.find(x => x.id === Number(id));
+    if (!p) return;
+    const msg = `Hola EL ASADOR, me interesa: *${p.name}* (Bs. ${p.price}). ¿Me dan más info?`;
+    window.open('https://wa.me/' + CONFIG.phone + '?text=' + encodeURIComponent(msg), '_blank');
+  },
+
+  onSearch(q) {
+    q = q.trim().toLowerCase();
+    if (!q) {
+      if (this.view === 'shop') this.filter(this.activeFilter);
+      return;
+    }
+    this.go('shop');
+    const found = products.filter(p => p.name.toLowerCase().includes(q) || p.cat.includes(q));
+    this.renderGrid('shop-grid', found);
+  },
+
+  toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  },
+
+  async sharePage() {
+    const url = window.location.href;
+    const shareData = {
+      title: 'EL ASADOR · Asado Chaqueño Boliviano',
+      text: '¡Mirá el menú de EL ASADOR! El auténtico asado chaqueño en Yacuiba.',
+      url: url
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(url);
+        this.toast('Enlace copiado al portapapeles');
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        this.toast('No se pudo compartir');
+      }
+    }
+  },
+
+  async shareProduct(id) {
+    const p = products.find(x => x.id === Number(id));
+    if (!p) return;
+    const url = window.location.href.split('#')[0] + '#producto-' + p.id;
+    const shareData = {
+      title: `${p.name} · EL ASADOR`,
+      text: `¡Mirá este plato de EL ASADOR! ${p.name} - Bs. ${p.price}`,
+      url: url
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(url);
+        this.toast('Enlace del producto copiado');
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        this.toast('No se pudo compartir');
+      }
+    }
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => App.init());
+</script>
+</body>
+</html>
